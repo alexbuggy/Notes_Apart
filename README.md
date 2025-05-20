@@ -33,6 +33,7 @@
 - **SQL Server** 
 - **ASP.NET Identity** for user authentication and roles
 - **Bootstrap 5** for UI/UX
+- **JavaScript**
 
 ---
 
