@@ -25,7 +25,7 @@
 
 ---
 
-##  Tech Stack
+##  Used Technologies
 
 - **ASP.NET Core MVC (.NET 9)**
 - **Entity Framework Core**
