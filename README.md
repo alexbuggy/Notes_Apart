@@ -19,9 +19,9 @@
 - View their own **public profile** with favorites and reviews
   
 ### 🛡️ Admin Features
-- **Delete inappropriate reviews** from any user
-- Only admins can **see the delete button** on reviews they don't own
-- Maintain a safe and moderated user experience
+- **Delete inappropriate reviews** from any user while accessing the admin panel page
+- Only admins can **see the delete button** on reviews they don't own outside the admin panel
+- Maintain a safe and moderated user experience 
 
 ---
 
