@@ -1,0 +1,302 @@
+﻿.profile-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    color: #fafcfa;
+}
+
+.profile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.profile-title {
+    color: #fafcfa;
+    font-size: 2rem;
+    margin: 0;
+}
+
+.edit-profile-btn {
+    background-color: #baf1ba;
+    color: #06180c;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+    .edit-profile-btn:hover {
+        background-color: #145214;
+        color: #baf1ba;
+    }
+
+.profile-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.profile-sidebar {
+    flex: 0 0 250px;
+    background-color: #06180c;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.profile-main {
+    flex: 1;
+    min-width: 300px;
+    background-color: #06180c;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.profile-image-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.profile-image {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #0f381d;
+}
+
+.profile-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+    .stat-item i {
+        width: 24px;
+        color: #baf1ba;
+    }
+
+.profile-info-display {
+    margin-bottom: 30px;
+}
+
+.info-section {
+    margin-bottom: 15px;
+}
+
+    .info-section h3 {
+        color: #baf1ba;
+        margin-bottom: 5px;
+        font-size: 1.2rem;
+    }
+
+.user-info {
+    color: #fafcfa;
+    font-size: 1rem;
+    margin: 0;
+}
+
+.profile-edit-form {
+    margin-bottom: 30px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-label {
+    display: block;
+    color: #baf1ba;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-control {
+    width: 100%;
+    padding: 8px;
+    background-color: #0f381d;
+    border: 1px solid #1b5e20;
+    border-radius: 5px;
+    color: #fafcfa;
+}
+
+.form-text {
+    display: block;
+    margin-top: 5px;
+    font-size: 0.85rem;
+}
+
+.form-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.cancel-btn {
+    background-color: #333;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.save-btn {
+    background-color: #baf1ba;
+    color: #06180c;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+    .save-btn:hover {
+        background-color: #145214;
+        color: #baf1ba;
+    }
+
+/* New styles for the tabbed navigation */
+.profile-nav {
+    margin-top: 20px;
+    margin-bottom: 30px;
+    width: 100%;
+}
+
+.nav-tabs {
+    border-bottom: 1px solid #1b5e20;
+}
+
+    .nav-tabs .nav-link {
+        color: #fafcfa;
+        background-color: transparent;
+        border: none;
+        border-bottom: 2px solid transparent;
+        border-radius: 0;
+        padding: 10px 20px;
+        margin-right: 5px;
+        font-weight: bold;
+        transition: all 0.3s ease;
+    }
+
+        .nav-tabs .nav-link:hover {
+            border-color: #baf1ba;
+            color: #baf1ba;
+        }
+
+        .nav-tabs .nav-link.active {
+            color: #baf1ba;
+            background-color: transparent;
+            border-bottom: 2px solid #baf1ba;
+        }
+
+.tab-content {
+    padding: 20px 0;
+}
+
+/* Styling for the reviews tab */
+.reviews-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.review-box {
+    background-color: #0f381d;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.review-date {
+    color: #aaa;
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.review-content {
+    margin-bottom: 10px;
+}
+
+.stars {
+    color: gold;
+    margin-bottom: 10px;
+}
+
+.album-info {
+    margin-top: 10px;
+}
+
+/* Styling for the favorite albums and songs tabs */
+.card {
+    height: 100%;
+    background-color: #0f381d;
+    border: none;
+    transition: transform 0.3s ease;
+}
+
+    .card:hover {
+        transform: translateY(-5px);
+    }
+
+.card-title {
+    font-size: 1rem;
+    margin-bottom: 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.card-text {
+    font-size: 0.9rem;
+    color: #aaa;
+}
+
+.list-group-item {
+    background-color: #0f381d !important;
+    border: none;
+    border-bottom: 1px solid #1b5e20;
+    padding: 15px;
+    transition: background-color 0.3s ease;
+}
+
+    .list-group-item:hover {
+        background-color: #145214 !important;
+    }
+
+.badge {
+    background-color: #1b5e20 !important;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .profile-content {
+        flex-direction: column;
+    }
+
+    .profile-sidebar {
+        flex: 0 0 100%;
+    }
+
+    .profile-main {
+        flex: 0 0 100%;
+    }
+}

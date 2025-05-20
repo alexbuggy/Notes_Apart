@@ -1,0 +1,33 @@
+﻿@model IEnumerable<NotesApart.Models.Artist>
+
+@{
+    ViewData["Title"] = "Artists";
+}
+
+<div class="profile-header text-center">
+    <h1 class="header1">Browse Artists</h1>
+</div>
+
+<div class="content container">
+    <div class="row">
+        @foreach (var artist in Model)
+        {
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card">
+                    <div class="img-wrapper" style="height: 250px;">
+                        <a asp-action="Details" asp-route-id="@artist.ArtistId">
+                            <img src="@artist.ImageUrl" alt="@artist.Name" class="img-fluid" />
+                        </a>
+                    </div>
+                    <div class="card-body text-center">
+                        <h5 class="card-title">
+                            <a class="title_in_carousel_box" asp-action="Details" asp-route-id="@artist.ArtistId">
+                                @artist.Name
+                            </a>
+                        </h5>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

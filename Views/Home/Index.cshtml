@@ -1,0 +1,144 @@
+﻿@model NotesApart.ViewModels.HomePageViewModel
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+
+<h1 class="header1">Popular Albums</h1>
+<div class="multiple-card-slider">
+    <div id="albumCarousel" class="carousel" data-bs-ride="false">
+        <div class="carousel-inner">
+            @for (int i = 0; i < Model.TopRatedAlbums.Count(); i++)
+            {
+                var album = Model.TopRatedAlbums.ElementAt(i);
+                <div class="carousel-item @(i == 0 ? "active" : "")">
+                    <div class="card">
+                        <div class="img-wrapper">
+                            <a asp-controller="Album" asp-action="Details" asp-route-id="@album.AlbumId">
+                                <img src="@album.CoverImageUrl" alt="@album.Title" />
+                            </a>
+                        </div>
+                        <div class="card-body">
+                            <a class="title_in_carousel_box" asp-controller="Album" asp-action="Details" asp-route-id="@album.AlbumId">@album.Title</a><br />
+                            <a class="title_in_carousel_box" asp-controller="Artist" asp-action="Details" asp-route-id="@album.ArtistId">@album.Artist.Name</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <button class="carousel-control-prev" type="button" data-bs-target="#albumCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#albumCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+</div>
+
+<h1 class="header1 mt-5">Popular Songs</h1>
+<div class="multiple-card-slider">
+    <div id="songCarousel" class="carousel" data-bs-ride="false">
+        <div class="carousel-inner">
+            @for (int i = 0; i < Model.TopRatedSongs.Count(); i++)
+            {
+                var song = Model.TopRatedSongs.ElementAt(i);
+                <div class="carousel-item @(i == 0 ? "active" : "")">
+                    <div class="card">
+                        <div class="img-wrapper">
+                            <a asp-controller="Song" asp-action="Details" asp-route-id="@song.SongId">
+                                <img src="@song.Album.CoverImageUrl" alt="@song.Title" />
+                            </a>
+                        </div>
+                        <div class="card-body">
+                            <a class="title_in_carousel_box" asp-controller="Song" asp-action="Details" asp-route-id="@song.SongId">@song.Title</a><br />
+                            <a class="title_in_carousel_box" asp-controller="Artist" asp-action="Details" asp-route-id="@song.ArtistId">@song.Artist.Name</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <button class="carousel-control-prev" type="button" data-bs-target="#songCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#songCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+</div>
+
+
+<section class="reviews-section">
+    <h1 class="header1">Popular Reviews</h1>
+    <div class="reviews-container">
+        @foreach (var review in Model.TopReviews)
+        {
+            <div class="review-box">
+                <div class="review-header">
+                    @if (review.Album != null)
+                    {
+                        <div class="contentcover">
+                            <a asp-controller="Album" asp-action="Details" asp-route-id="@review.AlbumId">
+                                <img src="@review.Album.CoverImageUrl" width="40" height="40" />
+                            </a>
+                        </div>
+                    }
+                    else if (review.Song != null)
+                    {
+                        <div class="contentcover">
+                            <a asp-controller="Song" asp-action="Details" asp-route-id="@review.SongId">
+                                <img src="@review.Song.Album.CoverImageUrl" width="40" height="40" />
+                            </a>
+                        </div>
+                    }
+
+                    <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="User Avatar" class="review-avatar" /></a>
+                    <div>
+                        <p class="review-user">User @review.UserId</p>
+                        <p class="review-date">@review.ReviewDate.ToShortDateString()</p>
+                    </div>
+                </div>
+                <h1>
+                @if (review.Album != null)
+                {
+                    <a class="album_title_in_review_box" asp-controller="Album" asp-action="Details" asp-route-id="@review.AlbumId">@review.Album.Title</a>
+                }
+                else if (review.Song != null)
+                {
+                    <a class="album_title_in_review_box" asp-controller="Song" asp-action="Details" asp-route-id="@review.SongId">@review.Song.Title</a>
+                }
+                </h1>
+                <span class="stars">
+                    @for (int i = 0; i < review.Rating; i++)
+                    {
+                        <span>⭐</span>
+                    }
+                </span>
+
+                <div class="review-footer">
+                    <p class="review-content">@review.Content</p>
+                    <form asp-controller="LikedReview" asp-action="ToggleLike" method="post" class="d-inline">
+                        <input type="hidden" name="reviewId" value="@review.ReviewId" />
+                        <button type="submit" class="like-button" style="background:none; border:none;">
+                            @if (Model.LikedReviewIds.Contains(review.ReviewId))
+                            {
+                                <img src="~/images/heart2.svg" alt="liked" width="30" height="30" />
+                            }
+                            else
+                            {
+                                <img src="~/images/heart.svg" alt="not liked" width="30" height="30" />
+                            }
+                        </button>
+                    </form>
+                    <span>@(review.LikedByUsers?.Count() ?? 0) likes</span>
+                </div>
+            </div>
+        }
+    </div>
+</section>

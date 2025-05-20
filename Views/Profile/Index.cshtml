@@ -1,0 +1,99 @@
+﻿@model NotesApart.ViewModels.ProfileViewModel
+
+@{
+    ViewData["Title"] = "My Reviews";
+}
+
+<div class="profile-header text-center">
+    <img src="https://s.abcnews.com/images/GMA/jaden-ap-er-190708_hpMain_16x9_992.jpg" alt="User Avatar" class="review-avatar">
+    <h1 class="header1">Username</h1>
+</div>
+
+<nav class="profile-nav">
+    <ul class="nav nav-underline justify-content-center">
+        <li class="nav-item">
+            <a asp-action="Index" class="nav-link @(ViewContext.RouteData.Values["action"].ToString() == "Index" ? "active" : "")">Reviews</a>
+        </li>
+        <li class="nav-item">
+            <a asp-action="FavouriteAlbums" class="nav-link @(ViewContext.RouteData.Values["action"].ToString() == "FavouriteAlbums" ? "active" : "")">Liked Albums</a>
+        </li>
+        <li class="nav-item">
+            <a asp-action="FavouriteSongs" class="nav-link @(ViewContext.RouteData.Values["action"].ToString() == "FavouriteSongs" ? "active" : "")">Liked Songs</a>
+        </li>
+    </ul>
+</nav>
+
+
+<div class="profile-header">
+    <h2 class="header1">Your Reviews</h2>
+</div>
+
+<div class="content container">
+    <section class="reviews-section">
+        <div class="reviews-container">
+            @foreach (var review in Model.Reviews)
+            {
+                <div class="review-box">
+                    <div class="review-header">
+                        <div class="contentcover">
+                            @if (review.Album != null)
+                            {
+                                <a asp-controller="Album" asp-action="Details" asp-route-id="@review.AlbumId">
+                                    <img src="@review.Album.CoverImageUrl" width="40" height="40" />
+                                </a>
+                            }
+                            else if (review.Song != null)
+                            {
+                                <a asp-controller="Song" asp-action="Details" asp-route-id="@review.SongId">
+                                    <img src="@review.Song.Album.CoverImageUrl" width="40" height="40" />
+                                </a>
+                            }
+                        </div>
+                        <p class="review-date">@review.ReviewDate.ToShortDateString()</p>
+                    </div>
+
+                    <p class="review-content">
+                        <h1>
+                            @if (review.Album != null)
+                            {
+                                <a class="album_title_in_review_box" asp-controller="Album" asp-action="Details" asp-route-id="@review.AlbumId">
+                                    @review.Album.Title
+                                </a>
+                            }
+                            else if (review.Song != null)
+                            {
+                                <a class="album_title_in_review_box" asp-controller="Song" asp-action="Details" asp-route-id="@review.SongId">
+                                    @review.Song.Title
+                                </a>
+                            }
+                        </h1>
+                        <span class="stars">
+                            @for (int i = 0; i < review.Rating; i++)
+                            {
+                                <span>⭐</span>
+                            }
+                        </span>
+                    </p>
+
+                    <div class="review-footer">
+                        <p class="review-content">@review.Content</p>
+                        <form asp-controller="LikedReview" asp-action="ToggleLike" method="post" class="d-inline">
+                            <input type="hidden" name="reviewId" value="@review.ReviewId" />
+                            <button type="submit" class="like-button" style="background:none; border:none;">
+                                @if (Model.LikedReviewIds.Contains(review.ReviewId))
+                                {
+                                    <img src="~/images/heart2.svg" alt="liked" width="30" height="30" />
+                                }
+                                else
+                                {
+                                    <img src="~/images/heart.svg" alt="not liked" width="30" height="30" />
+                                }
+                            </button>
+                        </form>
+                        <span>@(review.LikedByUsers?.Count() ?? 0) likes</span>
+                    </div>
+                </div>
+            }
+        </div>
+    </section>
+</div>

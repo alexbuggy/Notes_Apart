@@ -1,0 +1,138 @@
+﻿@model NotesApart.ViewModels.SongDetailsViewModel
+
+@{
+    ViewData["Title"] = Model.Song.Title;
+}
+
+
+<div class="main-content">
+    <div class="container-fluid mt-5">
+        <div class="row">
+            <div class="col-12 col-sm-6 col-md-4 text-center">
+                <img src="@Model.Song.Album.CoverImageUrl" alt="Song Cover" class="img-fluid rounded">
+                <div class="text-warning fs-4">
+                    @if (Model.Reviews != null && Model.Reviews.Any())
+                    {
+                        var averageRating = Math.Floor(Model.Reviews.Average(r => (double?)r.Rating) ?? 0);
+
+                        for (int i = 0; i < averageRating; i++)
+                        {
+                            <span>⭐</span>
+                        }
+                        <span>
+                            @{
+                                var avg = Model.Reviews.Average(r => (double?)r.Rating) ?? 0;
+                            }
+                            @(avg % 1 == 0 ? ((int)avg).ToString() : avg.ToString("0.0"))/5
+                        </span>
+                    }
+                    else
+                    {
+                        <span>No Ratings Yet</span>
+                    }
+                </div>
+            </div>
+
+            <div class="col-md-8">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <h2 class="header1">@Model.Song.Title</h2>
+                        <h4 class="header1">
+                            by
+                            <a asp-controller="Artist" asp-action="Details" asp-route-id="@Model.Song.ArtistId" class="title_in_carousel_box">
+                                @Model.Song.Artist.Name
+                            </a>
+                        </h4>
+                        <h4 class="header1">
+                            from
+                            <a asp-controller="Album" asp-action="Details" asp-route-id="@Model.Song.AlbumId" class="title_in_carousel_box">
+                                @Model.Song.Album.Title
+                            </a>
+                        </h4>
+                    </div>
+                    <form asp-controller="Song" asp-action="AddFavouriteSong" method="post">
+                        <input type="hidden" name="songId" value="@Model.Song.SongId" />
+                        <button type="submit" class="check-button">
+                            <img src="~/images/@(Model.IsFavorited ? "check.svg" : "plus1.svg")" alt="Favorite Button" />
+                        </button><span class="header1">Add to favourites</SPAN>
+                    </form>
+                </div>
+
+                <form asp-action="CreateReview" method="post" class="mt-4">
+                    <input type="hidden" name="songId" value="@Model.Song.SongId" />
+                    <div class="mb-3">
+                        <label for="review" class="header1">Your Review</label>
+                        <textarea class="form-control" name="content" id="review" rows="3" placeholder="Write your review here..."></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="header1">Your Rating</label>
+                        <select name="rating" class="form-select">
+                            <option value="">Select Rating</option>
+                            @for (int i = 5; i >= 1; i--)
+                            {
+                                <option value="@i">@String.Concat(Enumerable.Repeat("⭐", i))</option>
+                            }
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-submit">Submit Review</button>
+                </form>
+            </div>
+        </div>
+
+        <section class="reviews-section mt-5">
+            <h3 class="header1">Reviews</h3>
+            <div class="reviews-container">
+                @foreach (var review in Model.Reviews)
+                {
+                    <div class="review-box">
+                        <div class="review-header">
+                            <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="User" class="review-avatar"></a>
+                            <div>
+                                <p class="review-user">User @review.UserId</p>
+                                <p class="review-date">@DateTime.Now.ToShortDateString()</p>
+                            </div>
+                        </div>
+
+                        <p class="review-content">
+                            <span class="stars">
+                                @for (int i = 0; i < review.Rating; i++)
+                                {
+                                    <span>⭐</span>
+                                }
+                            </span>
+                        </p>
+
+                        <div class="review-footer">
+                            <p class="review-content">@review.Content</p>
+                            <form asp-controller="LikedReview" asp-action="ToggleLike" method="post" class="d-inline">
+                                <input type="hidden" name="reviewId" value="@review.ReviewId" />
+                                <button type="submit" class="like-button" style="background:none; border:none;">
+                                    @if (Model.LikedReviewIds.Contains(review.ReviewId))
+                                    {
+                                        <img src="~/images/heart2.svg" alt="liked" width="30" height="30" />
+                                    }
+                                    else
+                                    {
+                                        <img src="~/images/heart.svg" alt="not liked" width="30" height="30" />
+                                    }
+                                </button>
+                            </form>
+                            <span>@(review.LikedByUsers?.Count() ?? 0) likes</span>
+
+                            @if (review.UserId !=null)
+                            {
+                                <form asp-action="DeleteReview" method="post" class="d-inline">
+                                    <input type="hidden" name="reviewId" value="@review.ReviewId" />
+                                    <input type="hidden" name="songId" value="@Model.Song.SongId" />
+                                    <button type="submit" class="check-button">
+                                        <img src="~/images/trash.svg" alt="plus button">
+                                    </button>
+                                </form>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        </section>
+    </div>
+</div>

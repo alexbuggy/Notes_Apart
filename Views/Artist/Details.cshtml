@@ -1,0 +1,63 @@
+﻿@model NotesApart.Models.Artist
+
+@{
+    ViewData["Title"] = "Artist Details";
+}
+@{
+    var currentController = ViewContext.RouteData.Values["Controller"]?.ToString();
+}
+@if (currentController == "Artist")
+{
+    <link rel="stylesheet" href="~/css/artistpage.css" />
+}
+<div class="main-content">
+    <div class="container text-left mt-5">
+        <h1 class="header1">@Model.Name</h1>
+        <img src="@Model.ImageUrl" alt="@Model.Name" class="img-fluid rounded mt-3" style="max-width: 200px;">
+        <div class="text-warning fs-4 mt-2">
+            @for (int i = 0; i < Math.Floor(ViewBag.AverageRating ?? 0); i++)
+            {
+                <span>⭐</span>
+            }
+        </div>
+    </div>
+
+    <div class="container text-center mt-5">
+        <h1 class="header1">Albums</h1>
+    </div>
+
+    <div class="album-section">
+        <div class="container mt-8">
+            <div class="row">
+                @if (Model.Albums != null && Model.Albums.Any())
+                {
+                    foreach (var album in Model.Albums)
+                    {
+                        <div class="col-md-6 col-lg-4 mb-4">
+                            <div class="card">
+                                <div class="img-wrapper">
+                                    <a asp-controller="Album" asp-action="Details" asp-route-id="@album.AlbumId">
+                                        <img src="@album.CoverImageUrl" class="img-fluid" alt="@album.Title" />
+                                    </a>
+                                </div>
+                                <div class="card-body text-center">
+                                    <a class="title_in_carousel_box" asp-controller="Album" asp-action="Details" asp-route-id="@album.AlbumId">@album.Title</a><br>
+                                    @for (int i = 0; i < Math.Floor(album.Reviews?.Average(r => (double?)r.Rating) ?? 0); i++)
+                                    {
+                                        <span class="stars">⭐</span>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="text-center">
+                        <p class="header1">No albums found for this artist.</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

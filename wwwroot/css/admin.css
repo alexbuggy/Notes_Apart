@@ -1,0 +1,149 @@
+﻿
+:root {
+    --bg-color: #0a0a0a;
+    --text-color: #33ff33;
+    --secondary-color: #1a1a1a;
+    --highlight-color: #00cc00;
+    --danger-color: #ff3333;
+    --muted-color: #5d5d5d;
+    --header-color: #111111;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: 'Courier New', monospace;
+}
+
+.container {
+    max-width: 1200px;
+}
+
+.hacker-card {
+    border: 1px solid var(--text-color);
+    background-color: var(--secondary-color);
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.1);
+}
+
+.hacker-card-header {
+    background-color: var(--header-color);
+    border-bottom: 1px solid var(--text-color);
+    padding: 0.75rem 1rem;
+}
+
+.hacker-table {
+    width: 100%;
+    margin-bottom: 0;
+}
+
+    .hacker-table th, .hacker-table td {
+        padding: 0.75rem;
+        border-bottom: 1px solid #333;
+    }
+
+    .hacker-table tbody tr:hover {
+        background-color: rgba(0, 255, 0, 0.05);
+    }
+
+.hacker-badge {
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    border: 1px solid var(--text-color);
+    border-radius: 3px;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+}
+
+.hacker-badge-album {
+    color: #00ccff;
+    border-color: #00ccff;
+}
+
+.hacker-badge-song {
+    color: #ff9900;
+    border-color: #ff9900;
+}
+
+a {
+    color: var(--text-color);
+    text-decoration: none;
+    border-bottom: 1px dotted var(--text-color);
+}
+
+    a:hover {
+        color: var(--highlight-color);
+        border-bottom: 1px solid var(--highlight-color);
+    }
+
+.hacker-btn {
+    background-color: transparent;
+    color: var(--text-color);
+    border: 1px solid var(--text-color);
+    padding: 0.25rem 0.5rem;
+    font-family: 'Courier New', monospace;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+    .hacker-btn:hover {
+        background-color: var(--text-color);
+        color: var(--bg-color);
+    }
+
+.hacker-btn-danger {
+    color: var(--danger-color);
+    border-color: var(--danger-color);
+}
+
+    .hacker-btn-danger:hover {
+        background-color: var(--danger-color);
+        color: var(--bg-color);
+    }
+
+.hacker-star {
+    color: #ffcc00;
+}
+
+.hacker-star-empty {
+    color: var(--muted-color);
+}
+
+.page-title::before {
+    content: "> ";
+    color: var(--highlight-color);
+}
+
+.timestamp {
+    color: var(--muted-color);
+    font-size: 0.8rem;
+}
+
+.blinking-cursor::after {
+    content: "_";
+    animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+    50% {
+        opacity: 0;
+    }
+}
+
+.matrix-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    opacity: 0.03;
+    background: repeating-linear-gradient( 0deg, var(--bg-color), var(--bg-color) 15px, var(--text-color) 15px, var(--text-color) 16px );
+}
+
+.hacker-alert {
+    border: 1px dashed var(--text-color);
+    background-color: rgba(0, 255, 0, 0.05);
+    padding: 1rem;
+}
+

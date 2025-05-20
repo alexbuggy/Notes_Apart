@@ -1,0 +1,52 @@
+﻿@model NotesApart.ViewModels.ProfileViewModel
+@{
+    ViewData["Title"] = "My Liked Songs";
+}
+<div class="profile-header text-center">
+    <img src="https://s.abcnews.com/images/GMA/jaden-ap-er-190708_hpMain_16x9_992.jpg" alt="User Avatar" class="review-avatar">
+    <h1 class="header1">Username</h1>
+</div>
+
+<nav class="profile-nav">
+    <div class="container">
+        <ul class="nav nav-underline justify-content-center">
+            <li class="nav-item">
+                <a asp-action="Index" class="nav-link @(ViewContext.RouteData.Values["action"].ToString() == "Index" ? "active" : "")">Reviews</a>
+            </li>
+            <li class="nav-item">
+                <a asp-action="FavouriteAlbums" class="nav-link @(ViewContext.RouteData.Values["action"].ToString() == "FavouriteAlbums" ? "active" : "")">Liked Albums</a>
+            </li>
+            <li class="nav-item">
+                <a asp-action="FavouriteSongs" class="nav-link @(ViewContext.RouteData.Values["action"].ToString() == "FavouriteSongs" ? "active" : "")">Liked Songs</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="profile-header">
+    <h2 class="header1">Your Favourite Songs</h2>
+</div>
+
+<div class="content container">
+    <div class="album-section">
+        <div class="row">
+            @foreach (var favSong in Model.FavouriteSongs)
+            {
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card">
+                        <div class="img-wrapper">
+                            <a asp-controller="Song" asp-action="Details" asp-route-id="@favSong.SongId">
+                                <img src="@favSong.Song.Album.CoverImageUrl" class="img-fluid" alt="@favSong.Song.Title" />
+                            </a>
+                        </div>
+                        <div class="card-body text-center">
+                            <a class="title_in_carousel_box" asp-controller="Song" asp-action="Details" asp-route-id="@favSong.SongId">
+                                @favSong.Song.Title
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

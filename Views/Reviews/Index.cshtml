@@ -1,0 +1,131 @@
+﻿@model IEnumerable<NotesApart.Models.Review>
+
+@{
+    ViewData["Title"] = "Manage Reviews";
+}
+<link rel="stylesheet" href="~/css/admin.css">
+
+
+<div class="matrix-bg"></div>
+
+<div class="container py-4">
+    <div class="row mb-4">
+        <div class="col">
+            <h1 class="page-title">REVIEWS_MANAGEMENT.SYS</h1>
+            <p class="timestamp">Last accessed: @DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")</p>
+        </div>
+    </div>
+
+    <div class="hacker-card">
+        <div class="hacker-card-header">
+            <h5 class="mb-0">> SELECT * FROM reviews</h5>
+        </div>
+        <div>
+            <table class="hacker-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>TYPE</th>
+                        <th>TITLE</th>
+                        <th>ARTIST</th>
+                        <th>RATING</th>
+                        <th>CONTENT</th>
+                        <th>LIKES</th>
+                        <th>ACTIONS</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var review in Model)
+                    {
+                        <tr>
+                            <td>@review.ReviewId</td>
+                            <td>
+                                @if (review.Album != null)
+                                {
+                                    <span class="hacker-badge hacker-badge-album">ALBUM</span>
+                                }
+                                else if (review.Song != null)
+                                {
+                                    <span class="hacker-badge hacker-badge-song">SONG</span>
+                                }
+                            </td>
+                            <td>
+                                @if (review.Album != null)
+                                {
+                                    <a asp-controller="Album" asp-action="Details" asp-route-id="@review.Album.AlbumId">
+                                        @review.Album.Title
+                                    </a>
+                                }
+                                else if (review.Song != null)
+                                {
+                                    <a asp-controller="Song" asp-action="Details" asp-route-id="@review.Song.SongId">
+                                        @review.Song.Title
+                                    </a>
+                                }
+                            </td>
+                            <td>
+                                @if (review.Album?.Artist != null)
+                                {
+                                    @review.Album.Artist.Name
+                                }
+                                else if (review.Song?.Artist != null)
+                                {
+                                    @review.Song.Artist.Name
+                                }
+                            </td>
+                            <td>
+                                @for (int i = 1; i <= 5; i++)
+                                {
+                                    if (i <= review.Rating)
+                                    {
+                                        <span>*</span>
+                                    }
+
+                                }
+                            </td>
+                            <td>
+                                <code>@((review.Content?.Length ?? 0) > 50 ? review.Content.Substring(0, 47) + "..." : review.Content)</code>
+                            </td>
+                            <td>@(review.LikedByUsers?.Count ?? 0)</td>
+                            <td>
+                                <form asp-action="Delete" method="post" onsubmit="return confirm('WARNING: Permanently delete record?');">
+                                    <input type="hidden" name="id" value="@review.ReviewId" />
+                                    <button type="submit" class="hacker-btn hacker-btn-danger">
+                                        <i class="bi bi-trash"></i> remove threat
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="hacker-alert mt-4">
+            <i class="bi bi-terminal me-2"></i> [!] NO_DATA_FOUND: Database query returned 0 results.
+        </div>
+    }
+</div>
+
+<script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const title = document.querySelector('.page-title');
+        let originalText = title.innerText;
+        let currentIndex = 0;
+
+        title.innerText = '';
+
+        const interval = setInterval(() => {
+            if (currentIndex < originalText.length) {
+                title.innerText += originalText[currentIndex];
+                currentIndex++;
+            } else {
+                clearInterval(interval);
+            }
+        }, 50);
+    });
+</script>

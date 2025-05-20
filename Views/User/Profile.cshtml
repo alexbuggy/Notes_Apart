@@ -1,0 +1,213 @@
+﻿@model NotesApart.Models.User
+
+@{
+    ViewData["Title"] = "Profile";
+}
+
+<link rel="stylesheet" href="~/css/profile.css">
+
+<div class="profile-container">
+    <div class="profile-header">
+        <h1 class="profile-title"><i class="fas fa-user-circle"></i> @Model.UserName</h1>
+        @if (!(ViewData["IsPublicProfile"] as bool? ?? true))
+        {
+            <button id="edit-profile-btn" class="edit-profile-btn" onclick="toggleEditMode()">
+                <i class="fas fa-edit"></i> Edit Profile
+            </button>
+        }
+    </div>
+
+    <div class="profile-content">
+        <div class="profile-sidebar">
+            <div class="profile-image-container">
+                <img src="@(string.IsNullOrEmpty(Model.ProfileImg) ? "/images/default-profile.jpg" : Model.ProfileImg)"
+                     alt="Profile Picture" class="profile-image" />
+            </div>
+            <div id="profile-stats" class="profile-stats">
+                <div class="stat-item">
+                    <i class="fas fa-star"></i>
+                    <span>Reviews: @(Model.Reviews?.Count() ?? 0)</span>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-music"></i>
+                    <span>Favorite Songs: @(Model.FavoriteSongs?.Count() ?? 0)</span>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-compact-disc"></i>
+                    <span>Favorite Albums: @(Model.FavoriteAlbums?.Count() ?? 0)</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="profile-main">
+            <div id="profile-display" class="profile-info-display">
+                <div class="info-section">
+                    <h3>Username</h3>
+                    <p class="user-info">@Model.UserName</p>
+                </div>
+            </div>
+
+            <form id="profile-edit-form" class="profile-edit-form" asp-action="UpdateProfile" method="post" style="display: none;">
+                <div class="form-group">
+                    <label asp-for="UserName" class="form-label">Username</label>
+                    <input asp-for="UserName" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="ProfileImg" class="form-label">Profile Picture URL</label>
+                    <input asp-for="ProfileImg" class="form-control" placeholder="Enter image URL" />
+                    <small class="form-text text-muted">Enter a valid image URL for your profile picture.</small>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="cancel-btn" onclick="toggleEditMode()">Cancel</button>
+                    <button type="submit" class="save-btn">Save Changes</button>
+                </div>
+            </form>
+
+            <!-- Tabbed Navigation -->
+            <div class="profile-nav">
+                <ul class="nav nav-tabs" id="profileTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews" type="button" role="tab" aria-controls="reviews" aria-selected="true">Reviews</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="favorite-albums-tab" data-bs-toggle="tab" data-bs-target="#favorite-albums" type="button" role="tab" aria-controls="favorite-albums" aria-selected="false">Favorite Albums</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="favorite-songs-tab" data-bs-toggle="tab" data-bs-target="#favorite-songs" type="button" role="tab" aria-controls="favorite-songs" aria-selected="false">Favorite Songs</button>
+                    </li>
+                </ul>
+
+                <div class="tab-content mt-3" id="profileTabsContent">
+                    <!-- Reviews Tab -->
+                    <div class="tab-pane fade show active" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
+                        <h2 class="header1">Reviews</h2>
+                        @if (Model.Reviews != null && Model.Reviews.Any())
+                        {
+                            <div class="reviews-container">
+                                @foreach (var review in Model.Reviews.OrderByDescending(r => r.ReviewDate))
+                                {
+                                    <div class="review-box">
+                                        <div class="review-header">
+                                            <p class="review-date">@review.ReviewDate.ToShortDateString()</p>
+                                        </div>
+                                        <div class="review-content">
+                                            <p>@review.Content</p>
+                                        </div>
+                                        <div class="stars">
+                                            @for (int i = 0; i < review.Rating; i++)
+                                            {
+                                                <i class="fas fa-star"></i>
+                                            }
+                                            @for (int i = review.Rating; i < 5; i++)
+                                            {
+                                                <i class="far fa-star"></i>
+                                            }
+                                        </div>
+                                        <div class="album-info">
+                                            <a class="album_title_in_review_box" href="@Url.Action("Details", "Album", new { id = review.AlbumId })">
+                                                @review.Album?.Title
+                                            </a>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <p>No reviews written yet.</p>
+                        }
+                    </div>
+
+                    <!-- Favorite Albums Tab -->
+                    <div class="tab-pane fade" id="favorite-albums" role="tabpanel" aria-labelledby="favorite-albums-tab">
+                        <h2 class="header1">Favorite Albums</h2>
+                        @if (Model.FavoriteAlbums != null && Model.FavoriteAlbums.Any())
+                        {
+                            <div class="row">
+                                @foreach (var album in Model.FavoriteAlbums)
+                                {
+                                    <div class="col-md-4 col-sm-6 mb-4">
+                                        <div class="card">
+                                            <div class="img-wrapper">
+                                                <img src="@(string.IsNullOrEmpty(album.Album?.CoverImageUrl) ? "/images/default-album.jpg" : album.Album.CoverImageUrl)"
+                                                     alt="@album.Album?.Title" class="img-fluid">
+                                            </div>
+                                            <div class="card-body">
+                                                <h5 class="card-title">
+                                                    <a class="title_in_carousel_box" href="@Url.Action("Details", "Album", new { id = album.AlbumId })">
+                                                        @album.Album?.Title
+                                                    </a>
+                                                </h5>
+                                                <p class="card-text">@album.Album?.Artist?.Name</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <p>No favorite albums added yet.</p>
+                        }
+                    </div>
+
+                    <!-- Favorite Songs Tab -->
+                    <div class="tab-pane fade" id="favorite-songs" role="tabpanel" aria-labelledby="favorite-songs-tab">
+                        <h2 class="header1">Favorite Songs</h2>
+                        @if (Model.FavoriteSongs != null && Model.FavoriteSongs.Any())
+                        {
+                            <div class="list-group">
+                                @foreach (var song in Model.FavoriteSongs)
+                                {
+                                    <div class="list-group-item bg-dark text-white">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <h5 class="mb-1">
+                                                    <a class="track-link" href="@Url.Action("Details", "Song", new { id = song.SongId })">
+                                                        @song.Song?.Title
+                                                    </a>
+                                                </h5>
+                                                <p class="mb-1">@song.Song?.Album?.Artist?.Name</p>
+                                                <small>
+                                                    From album:
+                                                    <a class="album_title_in_review_box" href="@Url.Action("Details", "Album", new { id = song.Song?.AlbumId })">
+                                                        @song.Song?.Album?.Title
+                                                    </a>
+                                                </small>
+                                            </div>
+                                            <div>
+                                                <span class="badge bg-primary rounded-pill">Track @song.Song?.TrackNumber</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <p>No favorite songs added yet.</p>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function toggleEditMode() {
+            const display = document.getElementById('profile-display');
+            const form = document.getElementById('profile-edit-form');
+            const btn = document.getElementById('edit-profile-btn');
+            const isEditing = form.style.display !== 'none';
+
+            display.style.display = isEditing ? 'block' : 'none';
+            form.style.display = isEditing ? 'none' : 'block';
+            btn.innerHTML = isEditing
+                ? '<i class="fas fa-edit"></i> Edit Profile'
+                : '<i class="fas fa-times"></i> Cancel Editing';
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+}

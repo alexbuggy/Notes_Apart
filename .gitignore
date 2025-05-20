@@ -1,0 +1,9 @@
+# Ignore Visual Studio and build system files
+.vs/
+bin/
+obj/
+*.user
+*.suo
+*.db
+*.log
+*.pdb
